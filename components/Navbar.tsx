@@ -4,23 +4,37 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import ThemeIcon from './ThemeIcon';
 
-interface Props {
-  setTheme: (theme: string) => void;
-  theme: string;
-}
+const checkTheme = (theme: string) => {
+  if (
+    localStorage.theme === 'dark' ||
+    (!('theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches)
+  ) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+};
 
-export const Navbar = ({ setTheme, theme }: Props) => {
+const Navbar = () => {
   const [showNav, setShowNav] = useState(false);
   const [hideNavLink, setHideNavLink] = useState('');
   const [stroke, setStroke] = useState('white');
-  const [fill, setFill] = useState('#141414');
   const [opacity, setOpacity] = useState('1');
   const router = useRouter();
+  let initTheme = '';
+  if (typeof window !== 'undefined') {
+    initTheme = localStorage.theme;
+  }
+  const [theme, setTheme] = useState(initTheme);
 
   useEffect(() => {
-    setStroke(theme !== 'dark' ? 'white' : 'currentColor');
-    setFill(theme !== 'dark' ? 'white' : '#141414');
-    setOpacity(theme !== 'dark' ? '0.9' : '0.5');
+    checkTheme(initTheme);
+  }, [theme, initTheme]);
+
+  useEffect(() => {
+    setStroke(theme === 'dark' ? 'white' : 'currentColor');
+    setOpacity(theme === 'dark' ? '0.9' : '0.5');
   }, [theme]);
 
   useEffect(() => {
@@ -29,23 +43,27 @@ export const Navbar = ({ setTheme, theme }: Props) => {
 
   const setThemeNav = () => {
     if (localStorage.theme === 'dark') {
-      setTheme('dark');
+      setTheme('light');
       localStorage.setItem('theme', 'light');
     } else {
       localStorage.setItem('theme', 'dark');
-      setTheme('light');
+      setTheme('dark');
     }
   };
 
   return (
-    <nav className='px-4 py-2'>
+    <nav className='py-2'>
       <div className='container flex flex-wrap items-center justify-between mx-auto max-w-5xl px-8'>
         <Link
           href='/'
           className='text-sm py-1.5 mr-4'
           aria-label='Bojan Tomic Home'
         >
-          <Combine fill={fill} opacity={opacity} />
+          {theme === 'dark' ? (
+            <Combine fill={'white'} />
+          ) : (
+            <Combine fill={'black'} />
+          )}
         </Link>
         <button
           data-collapse-toggle='navbar-default'
@@ -79,7 +97,7 @@ export const Navbar = ({ setTheme, theme }: Props) => {
           <ul
             className={`${
               showNav ? 'w-fit' : ''
-            } flex flex-col mt-4  md:flex-row md:space-x-8 md:mt-0 text-sm md:font-medium md:border-0 leading-9 `}
+            } flex flex-col mt-4  md:flex-row md:space-x-8 md:mt-0 text-sm md:font-medium md:border-0 leading-9`}
           >
             <li
               className={`${
@@ -139,7 +157,7 @@ export const Navbar = ({ setTheme, theme }: Props) => {
             </li>
             <div className='opacity-80 md:flex items-center'>
               <button className='mb-2' onClick={() => setThemeNav()}>
-                <ThemeIcon stroke={stroke} opacity={opacity} />
+                <ThemeIcon stroke={stroke} opacity={opacity} theme={theme} />
               </button>
             </div>
           </ul>
@@ -153,3 +171,5 @@ export const Navbar = ({ setTheme, theme }: Props) => {
     </nav>
   );
 };
+
+export default Navbar;

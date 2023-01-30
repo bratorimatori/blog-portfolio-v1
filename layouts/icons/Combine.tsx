@@ -2,10 +2,9 @@ import React from 'react';
 
 interface Props {
   fill: string;
-  opacity: string;
 }
 
-export default function Combine({ fill, opacity }: Props) {
+export default function Combine({ fill }: Props) {
   return (
     <svg
       strokeMiterlimit='10'

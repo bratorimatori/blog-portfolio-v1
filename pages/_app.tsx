@@ -1,39 +1,21 @@
-import { HomeLayout } from '@/layouts/HomeLayout';
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Source_Sans_Pro } from '@next/font/google';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { HomeLayout } from '@/layouts/HomeLayout';
 
 const lora = Source_Sans_Pro({
-  weight: ['400', '700'],
+  weight: ['200', '400', '700'],
   style: ['normal', 'italic'],
   subsets: ['latin'],
   variable: '--font-lora',
 });
 
-const checkTheme = (theme: string) => {
-  if (
-    localStorage.theme === 'dark' ||
-    (!('theme' in localStorage) &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches)
-  ) {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
-};
-
-export default function App({ Component, pageProps }: AppProps) {
-  const [theme, setTheme] = useState('');
-
-  useEffect(() => {
-    checkTheme(theme);
-  }, [theme]);
-
+function App({ Component, pageProps }: AppProps) {
   return (
     <main
-      className={`${lora.variable} font-sans min-h-screen bg-white dark:bg-gray-900`}
+      className={`${lora.variable} font-sans min-h-screen bg-white dark:bg-[#020a13]`}
     >
       <Head>
         <title>Create Next App</title>
@@ -41,9 +23,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <HomeLayout setTheme={setTheme} theme={theme}>
+      <HomeLayout>
         <Component {...pageProps} />
       </HomeLayout>
     </main>
   );
 }
+
+export default App;

@@ -3,5 +3,5 @@ interface Props {
 }
 
 export const Header = ({ children }: Props) => {
-  return <header className='py-12'>{children}</header>;
+  return <header className='py-14'>{children}</header>;
 };

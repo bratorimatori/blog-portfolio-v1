@@ -4,10 +4,15 @@ import { animated, useSpring } from '@react-spring/web';
 interface Props {
   stroke: string;
   opacity: string;
+  theme: string;
 }
 
-export default function ThemeIcon({ stroke, opacity: propOpacitiy }: Props) {
-  const [isDarkMode, toggle] = useState(false);
+export default function ThemeIcon({
+  stroke,
+  theme,
+  opacity: propOpacitiy,
+}: Props) {
+  const [isDarkMode, toggle] = useState(theme === 'light');
   const properties = {
     sun: {
       r: 9,
@@ -52,9 +57,9 @@ export default function ThemeIcon({ stroke, opacity: propOpacitiy }: Props) {
         viewBox='0 0 24 24'
         fill='none'
         stroke={stroke}
-        strokeWidth='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
+        strokeWidth='1'
+        strokeLinecap='round'
+        strokeLinejoin='round'
         opacity={propOpacitiy}
         style={{ ...svgContainerProps, cursor: 'pointer' }}
         onClick={() => toggle((prev) => !prev)}
