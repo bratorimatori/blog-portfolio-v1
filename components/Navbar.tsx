@@ -101,20 +101,6 @@ const Navbar = () => {
           >
             <li
               className={`${
-                hideNavLink === '/about' ? 'hidden' : ''
-              } group transition duration-300`}
-            >
-              <Link
-                href='/about'
-                aria-current='page'
-                className='text-base text-gray-400 dark:text-gray-300'
-              >
-                About
-              </Link>
-              <span className='block scale-0 group-hover:scale-100 transition-all ease-in-out duration-500 h-px bg-gray-900 dark:bg-gray-300'></span>
-            </li>
-            <li
-              className={`${
                 hideNavLink === '/blog' ? 'hidden' : ''
               } group transition duration-300`}
             >
