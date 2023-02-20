@@ -1,6 +1,20 @@
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function Resume() {
+  const [theme, setTheme] = useState<null | string>('');
+  const [themeClass, setThemeClass] = useState('unset');
+
+  useEffect(() => {
+    console.log(localStorage.getItem('theme'));
+    if (localStorage.getItem('theme') !== null) {
+      setTheme(localStorage.getItem('theme'));
+      const themeClass =
+        theme === 'dark' ? 'invert(0.1) grayscale(0.1)' : 'unset';
+      setThemeClass(themeClass);
+    }
+  }, [theme]);
+
   return (
     <div className='container flex flex-col items-start justify-center mx-auto max-w-4xl min-h-[61vh] px-4'>
       <div className='' style={{ width: '740px' }}>
@@ -13,8 +27,17 @@ export default function Resume() {
             className='text-base  text-gray-900 dark:text-gray-200'
           >
             <strong>contact page</strong>
-          </Link>
-          .
+          </Link>{' '}
+          or{' '}
+          <Link
+            href='../../Bojan_Tomic_-_Software_Engineer (2).pdf'
+            aria-current='page'
+            className='text-base  text-gray-900 dark:text-gray-200'
+            download
+          >
+            <strong>download</strong>
+          </Link>{' '}
+          the resume.
         </p>
       </div>
       <iframe
@@ -22,7 +45,10 @@ export default function Resume() {
         width='740px'
         height='980px'
         allowFullScreen
-      ></iframe>
+        style={{
+          filter: `${themeClass}`,
+        }}
+      />
     </div>
   );
 }

@@ -1,9 +1,12 @@
+/* eslint-disable @next/next/inline-script-id */
+/* eslint-disable @next/next/no-before-interactive-script-outside-document */
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Source_Sans_Pro } from '@next/font/google';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HomeLayout } from '@/layouts/HomeLayout';
+import Script from 'next/script';
 
 const lora = Source_Sans_Pro({
   weight: ['200', '400', '700'],
@@ -23,6 +26,41 @@ function App({ Component, pageProps }: AppProps) {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
+      <Script
+        strategy='beforeInteractive'
+        dangerouslySetInnerHTML={{
+          __html: `
+              (function() {
+                window.__onThemeChange = function() {};
+                function setTheme(newTheme) {
+                  window.__theme = newTheme;
+                  preferredTheme = newTheme;
+                  document.body.className = newTheme;
+                  window.__onThemeChange(newTheme);
+                }
+                var preferredTheme;
+                try {
+                  preferredTheme = localStorage.getItem('theme');
+                  var theme = localStorage.getItem('theme') || 'light';
+                  if (theme === 'dark') {
+                    document.querySelector('html').classList.add('dark');
+                  }
+                } catch (err) { }
+                window.__setPreferredTheme = function(newTheme) {
+                  setTheme(newTheme);
+                  try {
+                    localStorage.setItem('theme', newTheme);
+                  } catch (err) {}
+                }
+                var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                darkQuery.addListener(function(e) {
+                  window.__setPreferredTheme(e.matches ? 'dark' : 'light')
+                });
+                setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
+              })();
+            `,
+        }}
+      />
       <HomeLayout>
         <Component {...pageProps} />
       </HomeLayout>

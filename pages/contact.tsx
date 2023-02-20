@@ -28,7 +28,6 @@ export default function Contact() {
       console.log(error);
       return;
     }
-    console.log('value', value);
   };
 
   return (

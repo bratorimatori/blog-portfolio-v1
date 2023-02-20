@@ -4,11 +4,11 @@ sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function sendEmail(req, res) {
   try {
-    await sendgrid.send({
-      to: '224736@gmail.com',
-      from: 'nesto@gmail.com',
+    const tmp = await sendgrid.send({
+      to: req.body.email,
+      from: 'smt@gmail.com',
       subject: `${req.body.subject}`,
-      html: `<div>You've got a mail</div>`,
+      html: `<p>${req.body.message}</p>`,
     });
   } catch (error) {
     return res.status(error.statusCode || 500).json({ error: error.message });

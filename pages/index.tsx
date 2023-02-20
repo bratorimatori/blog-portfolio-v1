@@ -1,8 +1,9 @@
 import GradientBox from '@/components/GradientBox';
+import { getSortedPostsData } from '@/lib/posts';
 import Link from 'next/link';
 
 export default function Home() {
-  let initTheme = '';
+  let initTheme = 'dark';
   if (typeof window !== 'undefined') {
     initTheme = localStorage.theme;
   }
@@ -74,7 +75,7 @@ export default function Home() {
           </div>
         </div>
         <footer className='flex items-center justify-start my-6'>
-          <Link aria-label='See More About Me' href='/about'>
+          <Link aria-label='See More About Me' href='/contact'>
             <p className='text-gray-500'>
               Contact Me
               <svg
@@ -134,4 +135,13 @@ export default function Home() {
       </section>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData();
+  return {
+    props: {
+      allPostsData,
+    },
+  };
 }
