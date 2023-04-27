@@ -40,7 +40,7 @@ export default function Contact() {
           Contact.
         </h1>
       </div>
-      <p className='text-base text-gray-500 dark:text-gray-300 leading-9 mt-10'>
+      <p className='text-base text-gray-500 dark:text-gray-300 leading-6 mt-10'>
         Let&apos;s connect. If you want to know more about me or my work, or if
         you would just like to say hello, send me a message. I&apos;d love to
         hear from you.
@@ -52,7 +52,6 @@ export default function Contact() {
           message: '',
         }}
         onSubmit={(values, actions) => {
-          alert(JSON.stringify(values, null, 2));
           actions.setSubmitting(false);
           handleSubmit(values);
         }}
@@ -104,7 +103,7 @@ export default function Contact() {
           </p>
         </Link>
       </footer>
-      <div className='flex items-center justify-start mt-12'>
+      <div className='flex items-center justify-start mt-12 mb-12'>
         <span className='mr-3'>
           <GradientBox width='36px' height='2px' borderRadius='0' />
         </span>

@@ -56,14 +56,10 @@ const Navbar = () => {
       <div className='container flex flex-wrap items-center justify-between mx-auto max-w-5xl px-8'>
         <Link
           href='/'
-          className='text-sm py-1.5 mr-4'
+          className='text-gray-900 dark:text-gray-300 text-2xl'
           aria-label='Bojan Tomic Home'
         >
-          {theme === 'dark' ? (
-            <Combine fill={'white'} />
-          ) : (
-            <Combine fill={'black'} />
-          )}
+          Bojan Tomic
         </Link>
         <button
           data-collapse-toggle='navbar-default'
@@ -105,7 +101,7 @@ const Navbar = () => {
               } group transition duration-300`}
             >
               <Link
-                href='/blog'
+                href='/posts'
                 aria-current='page'
                 className='text-base text-gray-400 dark:text-gray-300'
               >

@@ -6,7 +6,6 @@ export default function Resume() {
   const [themeClass, setThemeClass] = useState('unset');
 
   useEffect(() => {
-    console.log(localStorage.getItem('theme'));
     if (localStorage.getItem('theme') !== null) {
       setTheme(localStorage.getItem('theme'));
       const themeClass =
