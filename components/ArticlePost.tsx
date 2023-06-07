@@ -7,7 +7,7 @@ type Props = {
 
 const ArticlePost = ({ post }: Props) => {
   return (
-    <article className='text-gray-500 dark:text-gray-300 leading-6'>
+    <article className='p-4 border-solid border rounded-md bg-gray-100 border-border-color  dark:bg-transparent dark:border-border-color text-gray-500 dark:text-gray-300 leading-6'>
       <span className='text-sm mb-2'>Server-Side</span>
       <h3 className='text-lg text-gray-500 dark:text-gray-300 leading-6 mb-2'>
         {post.title}

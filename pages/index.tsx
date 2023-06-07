@@ -4,6 +4,7 @@ import GradientBox from '@/components/GradientBox';
 import PopularCard from '@/components/PopularCard';
 import ProjectCard from '@/components/ProjectCard';
 import { Post, getSortedPostsData } from '@/lib/posts';
+import { getProjects } from '@/util/getProjects';
 import Link from 'next/link';
 
 interface Props {
@@ -153,7 +154,7 @@ export default function Home({ allPostsData }: Props) {
           </span>
         </section>
         <section className='flex justify-between min-w-full'>
-          <ul className='grid gap-4 grid-cols-3 grid-rows-3 min-w-full'>
+          <ul className='grid gap-4 sm:grid-cols-3 min-w-full'>
             {allPostsData.map((post, idx) => (
               <li key={idx}>
                 <PopularCard post={post} />
@@ -161,17 +162,19 @@ export default function Home({ allPostsData }: Props) {
             ))}
           </ul>
         </section>
-        <section className='flex justify-between my-6 min-w-full items-center'>
+        <section className='flex justify-between my-6 min-w-full items-center mt-20'>
           <span className='text-3xl text-gray-500 dark:text-gray-300 leading-6'>
             Projects
           </span>
         </section>
         <section className='flex justify-between min-w-full'>
-          <div className='grid gap-4 grid-cols-3 grid-rows-3'>
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
-          </div>
+          <ul className='grid gap-4 sm:grid-cols-3 min-w-full'>
+            {getProjects().map((project, idx) => (
+              <li key={idx}>
+                <ProjectCard project={project} />
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
       <footer>

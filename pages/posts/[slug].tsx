@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { Post } from '../../lib/posts';
 import PostHeader from '@/components/PostHeader';
 import PostBody from '@/components/PostBody';
+import markdownToHtml from '@/lib/markdownToHtml';
 
 type Props = {
   post: Post;
@@ -12,7 +13,7 @@ type Props = {
 
 export default function BlogPost({ post }: Props) {
   const router = useRouter();
-  const title = `${post.title} | Next.js Blog Example`;
+  const title = `${post.title} | Dev Blog`;
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;
   }
@@ -54,10 +55,13 @@ export async function getStaticProps({ params }: Params) {
     'coverImage',
   ]);
 
+  const content = await markdownToHtml(post.content || '');
+
   return {
     props: {
       post: {
         ...post,
+        content,
       },
     },
   };

@@ -59,25 +59,25 @@ export default function Contact() {
         {() => (
           <Form className='container flex flex-col items-start justify-start mx-auto w-2/3 ml-0 mt-10'>
             <Field
-              className='border-solid border-x border-y border-sky-500 px-4 py-4 w-full mb-4 rounded-lg'
+              className='border-solid border pr-3 pl-3 pt-2 pb-2 w-full mb-4 rounded-md focus:outline-none focus-visible:ring'
               name='name'
               type='text'
               placeholder='Name'
             />
             <Field
-              className='border-solid border-x border-y border-sky-500 px-4 py-4 w-full mb-4 rounded-lg'
+              className='border-solid border pr-3 pl-3 pt-2 pb-2 w-full mb-4 rounded-md focus:outline-none focus-visible:ring'
               name='email'
               type='email'
               placeholder='Email'
             />
             <Field
-              className='border-solid border-x border-y border-sky-500 px-4 py-4 w-full mb-4 rounded-lg h-44'
+              className='border-solid border pr-3 pl-3 pt-2 pb-2 w-full mb-4 rounded-md h-44 focus:outline-none focus-visible:ring'
               name='message'
               component='textarea'
               placeholder='Message'
             />
             <button
-              className='border-solid border-x border-y border-sky-500 px-4 py-4 w-1/3 mb-4 rounded-lg bg-black text-white mt-8'
+              className='text-gray-500 dark:text-gray-300 text-sm leading-4 border-solid border rounded-md bg-gray-100 border-gray-800 hover:border-gray-300 pr-3 pl-3 pt-2 pb-2 dark:bg-button-background dark:border-gray-800 dark:hover:border-gray-400'
               type='submit'
             >
               Send Message

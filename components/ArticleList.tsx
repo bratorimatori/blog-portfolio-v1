@@ -13,7 +13,7 @@ const ArticleList = ({ post }: Props) => {
           className='flex justify-between w-fit'
           href={`/posts/${post.slug}`}
         >
-          <h3 className='text-lg text-gray-500 dark:text-gray-300 leading-6'>
+          <h3 className='text-base text-gray-500 dark:text-gray-300 leading-6'>
             {post.title}
           </h3>
         </Link>
