@@ -6,6 +6,7 @@ import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { HomeLayout } from '@/layouts/HomeLayout';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/react';
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -50,6 +51,7 @@ function App({ Component, pageProps }: AppProps) {
             `,
         }}
       />
+      <Analytics />
       <HomeLayout>
         <Component {...pageProps} />
       </HomeLayout>
