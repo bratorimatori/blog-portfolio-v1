@@ -18,10 +18,14 @@ module.exports = {
       emerald: colors.emerald,
       indigo: colors.indigo,
       yellow: colors.yellow,
+      'button-background': '#252525',
+      'border-color': '#2c2c2c',
+      'card-font': '#999',
+      'date-color': '#5F9EA0',
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-lora)'],
+        inter: ['Inter', 'sans-serif'],
       },
       keyframes: {
         point: {
