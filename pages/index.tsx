@@ -20,23 +20,6 @@ export default function Home({ allPostsData }: Props) {
 
   return (
     <>
-      <Helmet>
-        <title>{'Bojan Tomic Dev'}</title>
-
-        <meta property='fb:app_id' content='1293953327456577' />
-        <meta property='og:type' content='website' />
-        <meta property='site_name' content='childnoder' />
-        <meta property='title' content={'Bojan Tomic Dev'} />
-        <meta name='description' content={'Development Blog'} />
-        <meta name='keywords' content={'React, Node.js, Next.js'} />
-        <meta property='og:title' content={'Bojan Tomic Dev'} />
-        <meta property='og:description' content={'React, Node.js, Next.js'} />
-        <meta
-          property='og:image'
-          content='https://images.unsplash.com/photo-1506878206813-92402b8ded23?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80'
-        />
-        <meta property='og:url' content='https://childnoder.com' />
-      </Helmet>
       <div className='container flex flex-col items-center justify-center mx-auto max-w-4xl min-h-[40vh] px-4'>
         <section>
           <article>
