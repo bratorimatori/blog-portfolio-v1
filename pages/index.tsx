@@ -6,6 +6,7 @@ import ProjectCard from '@/components/ProjectCard';
 import { Post, getSortedPostsData } from '@/lib/posts';
 import { getProjects } from '@/util/getProjects';
 import Link from 'next/link';
+import { Helmet } from 'react-helmet';
 
 interface Props {
   allPostsData: Post[];
@@ -19,6 +20,19 @@ export default function Home({ allPostsData }: Props) {
 
   return (
     <>
+      <Helmet>
+        <title>{'Bojan Tomic Dev'}</title>
+        <meta property='fb:app_id' content='1293953327456577' />
+        <meta property='og:type' content='website' />
+        <meta property='site_name' content='childnoder' />
+        <meta property='title' content={'Bojan Tomic Dev'} />
+        <meta name='description' content={'Development Blog'} />
+        <meta name='keywords' content={'React, Node.js, Next.js'} />
+        <meta property='og:title' content={'Bojan Tomic Dev'} />
+        <meta property='og:description' content={'React, Node.js, Next.js'} />
+        <meta property='og:image' content='/cover/cover.jpg' />
+        <meta property='og:url' content='https://childnoder.com' />
+      </Helmet>
       <div className='container flex flex-col items-center justify-center mx-auto max-w-4xl min-h-[40vh] px-4'>
         <section>
           <article>
