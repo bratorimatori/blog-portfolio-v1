@@ -2,7 +2,7 @@
 title: 'Do you REALLY need SSR?'
 desc: 'Do you REALLY need SSR?'
 slug: 'do-you-really-need-ssr'
-coverImage: '/cover/study_background.jpg'
+coverImage: '/cover/cover.jpg'
 author: 'Bojan Tomic'
 date: '2023-07-01'
 ---
@@ -37,9 +37,9 @@ React, and GraphQL allowed us to do crazy things on user's devices that we've ne
 and you need to send requests back and forth a whole bunch of times to get something on their devices.
 \
 \
-In the old model, the way things worked in the original Multy-Page Application is that your device would request the server for example.com.
+In the old model, the way things worked in the original Multy-Page Application is that your device would request the server for **example.com**.
 The server does whatever it has to do to generate HTML. The HTML file is then sent to the user, which has all the content on it.
-If the file is a static file, then the server has it and can skip the generation, and when you say get example.com it just hands you the static HTML file.
+If the file is a static file, then the server has it and can skip the generation, and when you say get **example.com** it just hands you the static HTML file.
 But suppose you want it to be dynamic in any way or different based on which user is requesting the page, what time of day they're requesting, and
 anything to change about the HTML. In that case, you need to do that on the server with the original model because, again, this is important, HTML is static it doesn't
 change. If you want your HTML to change, you need something like JavaScript to update the HTML. We have two options either we have an HTML with nothing in it, and then
@@ -58,11 +58,11 @@ the origina
 &nbsp;
 
 The Single Page Application model. What happens first, you request the website, and you'll almost immediately get it back. You might even be hitting the cache, so you have it
-instantaneously. So you get example.com/index.html. However, this HTML has almost nothing in it.
+instantaneously. So you get **example.com/index.html**. However, this HTML has almost nothing in it.
 It doesn't have metadata; it doesn't have anything; it's probably just a scaffold, if even that, probably a blank page, and this is the crucial part, the blank page bit with
 head tags for JavaScript files, so this loads.
 Now some time is spent processing what this request got back, and now it realizes it needs a JavaScript file.
-To get the file, we send a request back to the CDN to get example.com/main.js.
+To get the file, we send a request back to the CDN to get **example.com/main.js**.
 This now goes from CDN back to the user's device. You currently have this JavaScript file, and your browser can run, open, and parse it. By the time this is done running, it realizes o damn we need more data than we have right now.
 Since now, we have the HTML and the JavaScript file but no actual data.
 How do we get the additional data? Well, you get that data by contacting an API. You now have a separate server that hosts the API you're
@@ -107,8 +107,8 @@ It's rather than rendering your whole page with HTML and sending the entire thin
 combination of that and a React new component model where some components are rendered on the server, some aren't, but you get to write your JavaScript once, and that's the magic of SSR. It is that the code that request's the static HTML and the code that gets the JSON data
 is the same as the code that does earlier parts on the server, so you can write your React code
 once and generate HTML to get the benefits of MPA but also have a good update later on the client side from that point forward.
-So we have a request again, getting example.com. Let's be clear this is using roughly the Next.js
-model for SSR. We get example.com. Here is where a few different things could happen. When this request gets
+So we have a request again, getting **example.com**. Let's be clear this is using roughly the Next.js
+model for SSR. We get **example.com**. Here is where a few different things could happen. When this request gets
 to the server, you can do a couple of different things. You can have a cached static page that you
 return immediately, so one option is immediate return SSG Static Site Generation so the HTML file already made
 and build. Another excellent option specific to Next.js is ISR Immediately Return Chache
@@ -125,7 +125,7 @@ check in the background and say if this is outdated, update it.
 What we are more focused on right now is full-on SSR. The new page gets generated on every request. The first thing to know is that a browser load will take quite a bit longer, similar
 to how long it took for MPA. So in this window, the browser is loading the HTML.
 Most of that time, it's just sitting there waiting for the server to finish
-its page generation to deliver the HTML(example.com/index.html). This HTML page will have stuff in it because the server will run the React code you wrote and do everything it needs to
+its page generation to deliver the HTML(**example.com/index.html**). This HTML page will have stuff in it because the server will run the React code you wrote and do everything it needs to
 generate index.html. Especially now with server components where you can await data in a component, the Next server
 will make sure the whole page is rendered, and all of the data fetching is done before the
 response is sent to the user.
