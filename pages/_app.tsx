@@ -12,16 +12,13 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <main className={`font-inter min-h-screen bg-white dark:bg-[#181818]`}>
       <Head>
-        <title>{'Bojan Tomic Dev'}</title>
+        <title>Bojan Tomic Dev</title>
 
-        <meta property='fb:app_id' content='1293953327456577' />
         <meta property='og:type' content='website' />
-        <meta property='site_name' content='childnoder' />
-        <meta property='title' content={'Bojan Tomic Dev'} />
-        <meta name='description' content={'Development Blog'} />
-        <meta name='keywords' content={'React, Node.js, Next.js'} />
-        <meta property='og:title' content={'Bojan Tomic Dev'} />
-        <meta property='og:description' content={'React, Node.js, Next.js'} />
+        <meta name='description' content='Development Blog' />
+        <meta name='keywords' content='React, Node.js, Next.js' />
+        <meta property='og:title' content='Bojan Tomic' />
+        <meta property='og:description' content='React, Node.js, Next.js' />
         <meta
           property='og:image'
           content='https://images.unsplash.com/photo-1506878206813-92402b8ded23?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80'
