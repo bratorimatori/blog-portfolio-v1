@@ -10,7 +10,7 @@ import { Analytics } from '@vercel/analytics/react';
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <main className={`font-inter min-h-screen bg-white dark:bg-[#181818]`}>
+    <>
       <Head>
         <title>Bojan Tomic Dev</title>
 
@@ -26,10 +26,11 @@ function App({ Component, pageProps }: AppProps) {
         <meta property='og:url' content='https://bojantomic.com' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <Script
-        strategy='beforeInteractive'
-        dangerouslySetInnerHTML={{
-          __html: `
+      <main className={`font-inter min-h-screen bg-white dark:bg-[#181818]`}>
+        <Script
+          strategy='beforeInteractive'
+          dangerouslySetInnerHTML={{
+            __html: `
               (function() {
                 window.__onThemeChange = function() {};
                 function setTheme(newTheme) {
@@ -58,13 +59,14 @@ function App({ Component, pageProps }: AppProps) {
                 setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
               })();
             `,
-        }}
-      />
-      <Analytics />
-      <HomeLayout>
-        <Component {...pageProps} />
-      </HomeLayout>
-    </main>
+          }}
+        />
+        <Analytics />
+        <HomeLayout>
+          <Component {...pageProps} />
+        </HomeLayout>
+      </main>
+    </>
   );
 }
 

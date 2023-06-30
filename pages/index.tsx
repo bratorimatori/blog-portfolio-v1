@@ -5,8 +5,8 @@ import PopularCard from '@/components/PopularCard';
 import ProjectCard from '@/components/ProjectCard';
 import { Post, getSortedPostsData } from '@/lib/posts';
 import { getProjects } from '@/util/getProjects';
+import Head from 'next/head';
 import Link from 'next/link';
-import { Helmet } from 'react-helmet';
 
 interface Props {
   allPostsData: Post[];
@@ -20,6 +20,21 @@ export default function Home({ allPostsData }: Props) {
 
   return (
     <>
+      <Head>
+        <title>Bojan Tomic Dev</title>
+
+        <meta property='og:type' content='website' />
+        <meta name='description' content='Development Blog' />
+        <meta name='keywords' content='React, Node.js, Next.js' />
+        <meta property='og:title' content='Bojan Tomic' />
+        <meta property='og:description' content='React, Node.js, Next.js' />
+        <meta
+          property='og:image'
+          content='https://images.unsplash.com/photo-1506878206813-92402b8ded23?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80'
+        />
+        <meta property='og:url' content='https://bojantomic.com' />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
       <div className='container flex flex-col items-center justify-center mx-auto max-w-4xl min-h-[40vh] px-4'>
         <section>
           <article>
