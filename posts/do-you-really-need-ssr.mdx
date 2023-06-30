@@ -7,8 +7,6 @@ author: 'Bojan Tomic'
 date: '2023-07-01'
 ---
 
-## What are Web Applications?
-
 \
 \
 You might have heard about React. It's been the easiest way to render HTML on user devices.
@@ -35,8 +33,17 @@ to render this on your user's device. It is no coincidence that GraphQL came so 
 needed to be much more strict about what data they exposed and how the client consumes it so you can build things using this model.
 React, and GraphQL allowed us to do crazy things on user's devices that we've never done before, but now you need a user to have a powerful device
 and you need to send requests back and forth a whole bunch of times to get something on their devices.
+&nbsp;  
 \
 \
+&nbsp;
+
+# ![multy-page-application](/images/multy-page-app.png)
+
+&nbsp;  
+\
+\
+&nbsp;
 In the old model, the way things worked in the original Multy-Page Application is that your device would request the server for **example.com**.
 The server does whatever it has to do to generate HTML. The HTML file is then sent to the user, which has all the content on it.
 If the file is a static file, then the server has it and can skip the generation, and when you say get **example.com** it just hands you the static HTML file.
@@ -44,13 +51,13 @@ But suppose you want it to be dynamic in any way or different based on which use
 anything to change about the HTML. In that case, you need to do that on the server with the original model because, again, this is important, HTML is static it doesn't
 change. If you want your HTML to change, you need something like JavaScript to update the HTML. We have two options either we have an HTML with nothing in it, and then
 the JavaScript does everything on the user's device, or we generate the HTML entirely on the server, and then the client updates it from there, so I've shown you the latter
-the origina
+the original.
 &nbsp;  
 \
 \
 &nbsp;
 
-# ![multy-page-application](/images/multy-page-app.png)
+# ![multy-page-application](/images/single-page-model.png)
 
 &nbsp;  
 \
@@ -92,7 +99,7 @@ no state in between and no control over what the loading state looks like becaus
 \
 &nbsp;
 
-# ![multy-page-application](/images/single-page-model.png)
+# ![multy-page-application](/images/server-side-rendering.png)
 
 &nbsp;  
 \
@@ -139,7 +146,6 @@ The page is loaded, but the interactions need to be because, without JavaScript,
 the buttons won't work, form submissions won't work all of the things we do in our JavaScript won't work.
 \
 \
-
 We now need to hydrate the page.
 Hydration is a concept of JavaScript libraries that read the HTML and take over from there because
 they used to render the HTML before. Because there's a time window here, we have the correct HTML but the actual JavaScript that runs the page has yet to arrive. Buttons won't work, links
@@ -154,19 +160,10 @@ this can take quite a while for the first load. The time to interact is the term
 page loads to when the interactions will work. When you move from SPA to SSR, you trade
 these awkward states in SPA where the UI is incorrect and changing a whole bunch, loading spinners and all that. You're swapping that for a longer window for the first load but a significantly better experience of the page loading
 with the correct information.
-
 &nbsp;  
 \
 \
 &nbsp;
-
-# ![multy-page-application](/images/server-side-rendering.png)
-
-&nbsp;  
-\
-\
-&nbsp;
-
 This is a bird's view of the whole rendering paradigm as I see it.
 Currently, server-side rendering makes much sense for performance optimization, and
 frameworks like Next.js make it easier to adopt and use. All the trends show this will be the next big thing, especially with new React server components.
