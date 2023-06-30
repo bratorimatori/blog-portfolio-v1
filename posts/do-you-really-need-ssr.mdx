@@ -1,0 +1,172 @@
+---
+title: 'Do you REALLY need SSR?'
+desc: 'Do you REALLY need SSR?'
+slug: 'do-you-really-need-ssr'
+coverImage: '/cover/study_background.jpg'
+author: 'Bojan Tomic'
+date: '2023-07-01'
+---
+
+## What are Web Applications?
+
+\
+\
+You might have heard about React. It's been the easiest way to render HTML on user devices.
+However, that last bit is vital. It renders on your user's devices. Reacts most significant Revolution was sending a giant JavaScript bundle to your user's device that could render the HTML
+that the page starts with and update it as things change. It was genuinely magical writing your render logic once and having it be the logic for your template
+to fill itself out and update. Before React and JSX, we had templating language libraries and Frameworks with their own template systems, which was challenging. Let's say that the difference between Frameworks like React and any templating language like Handlebars
+is the difference between declarative syntax, where in React, you describe what you want to render rather than how to render it. At the same time, template engines use an imperative syntax, so step-by-step instructions to create the template and then fill it with data.
+You would write your HTML first, then ship JavaScript to change what the HTML
+did and update it after it loaded. But you had separate steps for building the HTML and templates and then JavaScript that updates them.
+Let's say you have a page with tweets like your Twitter homepage to render. You first need to figure out who the user is
+you do that on the server when they make the request. You figure out what posts you should show them. You do that by fetching from the database on the server. You then use that data to generate some HTML and send that to the user so they can see their posts.
+But what happens when they make a new post? Before Frameworks like React and before the Ajax revolution on client-side JavaScript running requests
+a POST or any further request you did on the web would fire a full web request and refresh the entire page
+generating entirely new HTML or getting a new static HTML page. React made it easier to do all that on the client and send JSON blobs back.
+And then suddenly, we didn't have to fetch new HTML every time something changed.
+\
+\
+This came with the cost. The first big one is the client-side performance hit because the server is not rendering HTML the user's device is.
+Now the user's device is responsible for a lot more work.
+On top of that, things like HTML metadata and tags and all the fancy things you expect robots to crawl and get when you index on Google or you post on social media
+those preview cards are all generated based on the metadata in the HTML files.
+So if your HTML file is empty minus the JavaScript tag and that JavaScript loads and does everything, you lose any metadata benefits whatsoever. You must build a separate system to generate unique HTML for every page. That's a mess, and on top of that, you have to develop fully independent APIs to get the data to the client
+to render this on your user's device. It is no coincidence that GraphQL came so close to React because React normalizing client-side rendering meant that APIs
+needed to be much more strict about what data they exposed and how the client consumes it so you can build things using this model.
+React, and GraphQL allowed us to do crazy things on user's devices that we've never done before, but now you need a user to have a powerful device
+and you need to send requests back and forth a whole bunch of times to get something on their devices.
+\
+\
+In the old model, the way things worked in the original Multy-Page Application is that your device would request the server for example.com.
+The server does whatever it has to do to generate HTML. The HTML file is then sent to the user, which has all the content on it.
+If the file is a static file, then the server has it and can skip the generation, and when you say get example.com it just hands you the static HTML file.
+But suppose you want it to be dynamic in any way or different based on which user is requesting the page, what time of day they're requesting, and
+anything to change about the HTML. In that case, you need to do that on the server with the original model because, again, this is important, HTML is static it doesn't
+change. If you want your HTML to change, you need something like JavaScript to update the HTML. We have two options either we have an HTML with nothing in it, and then
+the JavaScript does everything on the user's device, or we generate the HTML entirely on the server, and then the client updates it from there, so I've shown you the latter
+the origina
+&nbsp;  
+\
+\
+&nbsp;
+
+# ![multy-page-application](/images/multy-page-app.png)
+
+&nbsp;  
+\
+\
+&nbsp;
+
+The Single Page Application model. What happens first, you request the website, and you'll almost immediately get it back. You might even be hitting the cache, so you have it
+instantaneously. So you get example.com/index.html. However, this HTML has almost nothing in it.
+It doesn't have metadata; it doesn't have anything; it's probably just a scaffold, if even that, probably a blank page, and this is the crucial part, the blank page bit with
+head tags for JavaScript files, so this loads.
+Now some time is spent processing what this request got back, and now it realizes it needs a JavaScript file.
+To get the file, we send a request back to the CDN to get example.com/main.js.
+This now goes from CDN back to the user's device. You currently have this JavaScript file, and your browser can run, open, and parse it. By the time this is done running, it realizes o damn we need more data than we have right now.
+Since now, we have the HTML and the JavaScript file but no actual data.
+How do we get the additional data? Well, you get that data by contacting an API. You now have a separate server that hosts the API you're
+hitting with the request for actual data you need to render the page.
+\
+\
+This is like when we should show your feed on Twitter or the current home page on Twitch. Actual data, a bunch of JSON blobs. Your
+API does whatever it needs to fetch the data. It goes to the database, calls services, caches whatever, and then it sends back, after all that, a bunch of JSON data
+or whatever else, and now the client can finally show you something. The vital thing to know is until this point, you see nothing. These things must happen
+before anything is shown on the user's device.
+If you have your thing set up right after you get the blank HTML page and the JavaScript file, while you wait for JSON data, you have loading Spinners.
+When all of this is done, we will have HTML on your device, but it will take a while to get there because
+first, we have to send the blank HTML, then we have to get the JavaScript bundle, then we have to parse JavaScript, and then we're rendering.
+After we fetched additional API data, only then do we have an actual page, and the client has to make three separate requests for this to happen.
+The first request is for the HTML, the second one is for JavaScript, and the third and onward requests are for the actual data that you need to
+render the page so the client can do that rendering.
+\
+\
+This can get even scarier if we need to make more than one API request. If I request something, I render a component, and then that component needs to request more
+things. It can become like several back-and-forths before we have the correct page. We've all seen this whenever we go to a web page, and then a bunch of random scaffolding and skeletons load, and there are loading Spinners everywhere. Those loading Spinners keep ticking out, and sometimes, like, one will disappear, and two more will appear underneath, and it keeps going until the whole UI renders. That's because we are doing all of this
+work on the client and generating each of those parts. Every component can be its own contained set of these calls, and that's terrifying.
+If we go back to MPA, what we had before SPA took over is this blank window where all that happened was the browser loading and then the page loading and getting the correct page. There's
+no state in between and no control over what the loading state looks like because the browser loads, and the static HTML page gets delivered. You just get the page with the correct info on it.
+
+&nbsp;  
+\
+\
+&nbsp;
+
+# ![multy-page-application](/images/single-page-model.png)
+
+&nbsp;  
+\
+\
+&nbsp;
+
+What is SSR?
+In a traditional sense, MPA is server-side rendered. The server is rendering
+the page, but it's generating HTML and has no idea what happens after the fact.
+What SSR usually means nowadays is something more granular.
+It's rather than rendering your whole page with HTML and sending the entire thing to the user, it's some
+combination of that and a React new component model where some components are rendered on the server, some aren't, but you get to write your JavaScript once, and that's the magic of SSR. It is that the code that request's the static HTML and the code that gets the JSON data
+is the same as the code that does earlier parts on the server, so you can write your React code
+once and generate HTML to get the benefits of MPA but also have a good update later on the client side from that point forward.
+So we have a request again, getting example.com. Let's be clear this is using roughly the Next.js
+model for SSR. We get example.com. Here is where a few different things could happen. When this request gets
+to the server, you can do a couple of different things. You can have a cached static page that you
+return immediately, so one option is immediate return SSG Static Site Generation so the HTML file already made
+and build. Another excellent option specific to Next.js is ISR Immediately Return Chache
+page if the cache page is still valid.
+\
+\
+ISR is a fantastic concept where you could have a thing that was generated rather than a thing existing
+forever, and now it's out of date. You can manually revalidate it when changes happen, so rather than
+regenerating your whole site when you push or having to tell your cash to throw away old data when changes
+occur with Vercel, you can individually invalidate a request and say hey, this URL data that it returns is
+different now, which means the HTML returned should be updated. Or you can set it with a timer where, depending on how
+long it has been since someone last requested it, it will immediately give them a cached result. But also
+check in the background and say if this is outdated, update it.
+What we are more focused on right now is full-on SSR. The new page gets generated on every request. The first thing to know is that a browser load will take quite a bit longer, similar
+to how long it took for MPA. So in this window, the browser is loading the HTML.
+Most of that time, it's just sitting there waiting for the server to finish
+its page generation to deliver the HTML(example.com/index.html). This HTML page will have stuff in it because the server will run the React code you wrote and do everything it needs to
+generate index.html. Especially now with server components where you can await data in a component, the Next server
+will make sure the whole page is rendered, and all of the data fetching is done before the
+response is sent to the user.
+That means that when we get this response back, the page now has the correct data shown, so as far
+as the user is concerned site is loaded.
+We still have to fetch the JavaScript because, again, the client still needs to be able to update.
+What we've done is just the first pass on the server, so the server has now fetched and rendered, and made the HTML for the client, but for the client to change, it still needs to load more
+JavaScript to take over. This will be very fast because
+it's coming from the CDN. Then it will parse the JavaScript.
+The page is loaded, but the interactions need to be because, without JavaScript,
+the buttons won't work, form submissions won't work all of the things we do in our JavaScript won't work.
+\
+\
+
+We now need to hydrate the page.
+Hydration is a concept of JavaScript libraries that read the HTML and take over from there because
+they used to render the HTML before. Because there's a time window here, we have the correct HTML but the actual JavaScript that runs the page has yet to arrive. Buttons won't work, links
+won't work, the interaction is not here yet, and that interaction only happens once the JavaScript is fully loaded,
+parsed, and hydrated. Reusability isn't a big deal. It takes some time to hydrate, and depending
+on how slow your device is, how far away the CDN is, and how hard it is for your device to parse
+the page and catch up, hydration might take a bit. But this window does not affect you unless you're clicking
+buttons. You need to click something before hydration is too big a deal.
+And once this JavaScript is loaded on your device for the first time, it will be cached, and then it will be much faster in the future.
+Further loads will be much faster, almost immediate, but
+this can take quite a while for the first load. The time to interact is the term for this phase, how long from when the
+page loads to when the interactions will work. When you move from SPA to SSR, you trade
+these awkward states in SPA where the UI is incorrect and changing a whole bunch, loading spinners and all that. You're swapping that for a longer window for the first load but a significantly better experience of the page loading
+with the correct information.
+
+&nbsp;  
+\
+\
+&nbsp;
+
+# ![multy-page-application](/images/server-side-rendering.png)
+
+&nbsp;  
+\
+\
+&nbsp;
+
+This is a bird's view of the whole rendering paradigm as I see it.
+Currently, server-side rendering makes much sense for performance optimization, and
+frameworks like Next.js make it easier to adopt and use. All the trends show this will be the next big thing, especially with new React server components.
