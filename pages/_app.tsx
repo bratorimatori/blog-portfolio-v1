@@ -19,7 +19,7 @@ function App({ Component, pageProps }: AppProps) {
         <meta name='keywords' content='React, Node.js, Next.js' />
         <meta property='og:title' content='Bojan Tomic' />
         <meta property='og:description' content='React, Node.js, Next.js' />
-        <meta property='og:image' content='/cover/cover.jpg' />
+        <meta property='og:image' content='/cover/og_image.jpg' />
         <meta property='og:url' content='https://bojantomic.com' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
