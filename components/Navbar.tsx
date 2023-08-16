@@ -33,8 +33,10 @@ const Navbar = () => {
   }, [theme, initTheme]);
 
   useEffect(() => {
-    setStroke(theme === 'dark' ? 'white' : 'currentColor');
-    setOpacity(theme === 'dark' ? '0.9' : '0.5');
+    setStroke(
+      theme === 'dark' || theme === undefined ? 'white' : 'currentColor'
+    );
+    setOpacity(theme === 'dark' || theme === undefined ? '0.9' : '0.5');
   }, [theme]);
 
   useEffect(() => {
