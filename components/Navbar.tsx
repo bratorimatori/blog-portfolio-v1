@@ -87,7 +87,7 @@ const Navbar = () => {
         <div
           className={`${
             showNav ? '' : 'hidden'
-          } w-full md:flex md:w-auto items-end h-11`}
+          } w-full md:flex md:w-auto items-end h-13`}
           id='navbar-default'
         >
           <ul
@@ -137,11 +137,13 @@ const Navbar = () => {
               </Link>
               <span className='block scale-0 group-hover:scale-100 transition-all ease-in-out duration-500 h-px bg-gray-900 dark:bg-gray-300'></span>
             </li>
-            <div className='opacity-80 md:flex items-center'>
-              <button className='mb-2' onClick={() => setThemeNav()}>
-                <ThemeIcon stroke={stroke} opacity={opacity} theme={theme} />
-              </button>
-            </div>
+            <li>
+              <div className='opacity-80 md:flex items-center'>
+                <button className='mb-2' onClick={() => setThemeNav()}>
+                  <ThemeIcon stroke={stroke} opacity={opacity} theme={theme} />
+                </button>
+              </div>
+            </li>
           </ul>
         </div>
       </div>

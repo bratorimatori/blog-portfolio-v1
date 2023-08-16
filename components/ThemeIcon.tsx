@@ -12,7 +12,7 @@ export default function ThemeIcon({
   theme,
   opacity: propOpacitiy,
 }: Props) {
-  const [isDarkMode, toggle] = useState(theme === 'light');
+  const [isDarkMode, toggle] = useState(theme === 'dark');
   const properties = {
     sun: {
       r: 9,
@@ -76,7 +76,7 @@ export default function ThemeIcon({
         </mask>
         <animated.circle
           style={centerCircleProps}
-          fill='white'
+          fill={stroke}
           cx='12'
           cy='12'
           r='9'
