@@ -12,7 +12,9 @@ export default function ThemeIcon({
   theme,
   opacity: propOpacitiy,
 }: Props) {
-  const [isDarkMode, toggle] = useState(theme === 'dark');
+  const [isDarkMode, toggle] = useState(
+    theme === 'dark' || theme === undefined
+  );
   const properties = {
     sun: {
       r: 9,
