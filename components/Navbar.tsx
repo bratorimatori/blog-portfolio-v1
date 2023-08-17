@@ -44,7 +44,7 @@ const Navbar = () => {
   }, [router.route]);
 
   const setThemeNav = () => {
-    if (localStorage.theme === 'dark') {
+    if (localStorage.theme === 'dark' || theme === undefined) {
       setTheme('light');
       localStorage.setItem('theme', 'light');
     } else {
