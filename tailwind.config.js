@@ -27,6 +27,9 @@ module.exports = {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
       },
+      h1: {
+        fontSize: '20px',
+      },
       keyframes: {
         point: {
           '0%': { transform: 'translate(3px)' },
@@ -43,5 +46,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 };

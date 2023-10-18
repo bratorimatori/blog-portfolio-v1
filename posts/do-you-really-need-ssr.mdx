@@ -7,6 +7,15 @@ author: 'Bojan Tomic'
 date: '2023-07-01'
 ---
 
+# Section 1: Evolution of Rendering Logic
+
+&nbsp;
+\
+&nbsp;
+
+- Introduction to React: Transforming HTML Rendering
+- Client-Side Rendering Magic: The Impact of React's JavaScript Bundle
+
 \
 \
 You might have heard about React. It's been the easiest way to render HTML on user devices.
@@ -22,6 +31,20 @@ But what happens when they make a new post? Before Frameworks like React and bef
 a POST or any further request you did on the web would fire a full web request and refresh the entire page
 generating entirely new HTML or getting a new static HTML page. React made it easier to do all that on the client and send JSON blobs back.
 And then suddenly, we didn't have to fetch new HTML every time something changed.
+&nbsp;  
+\
+\
+&nbsp;
+
+# Section 2: Declarative vs. Imperative Syntax
+
+&nbsp;
+\
+&nbsp;
+
+- React's Declarative Approach: Describing vs. Instructing Rendering
+- Pre-React Era: Templating Languages and Imperative Syntax Challenges
+
 \
 \
 This came with the cost. The first big one is the client-side performance hit because the server is not rendering HTML the user's device is.
@@ -64,9 +87,23 @@ the original.
 \
 &nbsp;
 
+# Section 3: Enhancing User Experience
+
+&nbsp;
+\
+&nbsp;
+
+- Dynamic Content Rendering: The Twitter Homepage Example
+- Pre-React Web Requests: Full Page Refresh vs. Client-Side Updates
+
+&nbsp;
+\
+\
+&nbsp;
+
 The Single Page Application model. What happens first, you request the website, and you'll almost immediately get it back. You might even be hitting the cache, so you have it
 instantaneously. So you get **example.com/index.html**. However, this HTML has almost nothing in it.
-It doesn't have metadata; it doesn't have anything; it's probably just a scaffold, if even that, probably a blank page, and this is the crucial part, the blank page bit with
+It doesn't have metadata; it doesn't have anything; it's probably just a scaffold, if even that, probably a blank page, and this is the crucial part, the blank page but with
 head tags for JavaScript files, so this loads.
 Now some time is spent processing what this request got back, and now it realizes it needs a JavaScript file.
 To get the file, we send a request back to the CDN to get **example.com/main.js**.
@@ -106,46 +143,89 @@ no state in between and no control over what the loading state looks like becaus
 \
 &nbsp;
 
-What is SSR?
-In a traditional sense, MPA is server-side rendered. The server is rendering
-the page, but it's generating HTML and has no idea what happens after the fact.
-What SSR usually means nowadays is something more granular.
-It's rather than rendering your whole page with HTML and sending the entire thing to the user, it's some
-combination of that and a React new component model where some components are rendered on the server, some aren't, but you get to write your JavaScript once, and that's the magic of SSR. It is that the code that request's the static HTML and the code that gets the JSON data
-is the same as the code that does earlier parts on the server, so you can write your React code
-once and generate HTML to get the benefits of MPA but also have a good update later on the client side from that point forward.
-So we have a request again, getting **example.com**. Let's be clear this is using roughly the Next.js
-model for SSR. We get **example.com**. Here is where a few different things could happen. When this request gets
-to the server, you can do a couple of different things. You can have a cached static page that you
-return immediately, so one option is immediate return SSG Static Site Generation so the HTML file already made
-and build. Another excellent option specific to Next.js is ISR Immediately Return Chache
-page if the cache page is still valid.
+# Section 4: Introduction to Server-Side Rendering (SSR)
+
+&nbsp;
+\
+&nbsp;
+
+- SSR Concept: Bridging the Gap Between MPA and SPA Benefits of SSR:
+- Writing React Code Once for Both Server and Client Immediate Return Options: SSG
+- ISR in Next.js Full SSR Process: Browser Load, Server Rendering, JavaScript
+  Fetching
+
+&nbsp;
 \
 \
-ISR is a fantastic concept where you could have a thing that was generated rather than a thing existing
-forever, and now it's out of date. You can manually revalidate it when changes happen, so rather than
-regenerating your whole site when you push or having to tell your cash to throw away old data when changes
-occur with Vercel, you can individually invalidate a request and say hey, this URL data that it returns is
-different now, which means the HTML returned should be updated. Or you can set it with a timer where, depending on how
-long it has been since someone last requested it, it will immediately give them a cached result. But also
-check in the background and say if this is outdated, update it.
-What we are more focused on right now is full-on SSR. The new page gets generated on every request. The first thing to know is that a browser load will take quite a bit longer, similar
-to how long it took for MPA. So in this window, the browser is loading the HTML.
-Most of that time, it's just sitting there waiting for the server to finish
-its page generation to deliver the HTML(**example.com/index.html**). This HTML page will have stuff in it because the server will run the React code you wrote and do everything it needs to
-generate index.html. Especially now with server components where you can await data in a component, the Next server
-will make sure the whole page is rendered, and all of the data fetching is done before the
-response is sent to the user.
-That means that when we get this response back, the page now has the correct data shown, so as far
-as the user is concerned site is loaded.
-We still have to fetch the JavaScript because, again, the client still needs to be able to update.
-What we've done is just the first pass on the server, so the server has now fetched and rendered, and made the HTML for the client, but for the client to change, it still needs to load more
-JavaScript to take over. This will be very fast because
-it's coming from the CDN. Then it will parse the JavaScript.
-The page is loaded, but the interactions need to be because, without JavaScript,
-the buttons won't work, form submissions won't work all of the things we do in our JavaScript won't work.
+&nbsp;
+
+What is SSR? In a traditional sense, MPA is server-side rendered. The server
+is rendering the page, but it's generating HTML and has no idea what happens after
+the fact. What SSR usually means nowadays is something more granular. It's rather
+than rendering your whole page with HTML and sending the entire thing to the user,
+it's some combination of that and a React new component model where some components
+are rendered on the server, some aren't, but you get to write your JavaScript once,
+and that's the magic of SSR. It is that the code that request's the static HTML and
+the code that gets the JSON data is the same as the code that does earlier parts
+on the server, so you can write your React code once and generate HTML to get the
+benefits of MPA but also have a good update later on the client side from that point
+forward. So we have a request again, getting **example.com**. Let's be clear this
+is using roughly the Next.js model for SSR. We get **example.com**. Here is where
+a few different things could happen. When this request gets to the server, you can
+do a couple of different things. You can have a cached static page that you return
+immediately, so one option is immediate return SSG Static Site Generation so the
+HTML file already made and build. Another excellent option specific to Next.js is
+ISR Immediately Return Chache page if the cache page is still valid.
+&nbsp;
 \
 \
+&nbsp;
+ISR is a fantastic concept where you could have a thing that was generated rather than a thing
+existing forever, and now it's out of date. You can manually revalidate it when changes
+happen, so rather than regenerating your whole site when you push or having to tell
+your cash to throw away old data when changes occur with Vercel, you can individually
+invalidate a request and say hey, this URL data that it returns is different now,
+which means the HTML returned should be updated. Or you can set it with a timer where,
+depending on how long it has been since someone last requested it, it will immediately
+give them a cached result. But also check in the background and say if this is outdated,
+update it. What we are more focused on right now is full-on SSR. The new page gets
+generated on every request. The first thing to know is that a browser load will take
+quite a bit longer, similar to how long it took for MPA. So in this window, the browser
+is loading the HTML. Most of that time, it's just sitting there waiting for the server
+to finish its page generation to deliver the HTML(**example.com/index.html**). This
+HTML page will have stuff in it because the server will run the React code you wrote
+and do everything it needs to generate index.html. Especially now with server components
+where you can await data in a component, the Next server will make sure the whole
+page is rendered, and all of the data fetching is done before the response is sent
+to the user. That means that when we get this response back, the page now has the
+correct data shown, so as far as the user is concerned site is loaded. We still have
+to fetch the JavaScript because, again, the client still needs to be able to update.
+What we've done is just the first pass on the server, so the server has now fetched
+and rendered, and made the HTML for the client, but for the client to change, it
+still needs to load more JavaScript to take over. This will be very fast because
+it's coming from the CDN. Then it will parse the JavaScript. The page is loaded,
+but the interactions need to be because, without JavaScript, the buttons won't work,
+form submissions won't work all of the things we do in our JavaScript won't work.
+
+&nbsp;
+\
+\
+&nbsp;
+
+# Section 5: Hydration and Time to Interact
+
+&nbsp;
+\
+&nbsp;
+
+- Hydration Concept: JavaScript Taking Over After HTML Rendering Time
+- Interact: Balancing First Load Delays with Improved Interactivity
+
+&nbsp;
+\
+\
+&nbsp;
+
 We now need to hydrate the page.
 Hydration is a concept of JavaScript libraries that read the HTML and take over from there because
 they used to render the HTML before. Because there's a time window here, we have the correct HTML but the actual JavaScript that runs the page has yet to arrive. Buttons won't work, links
@@ -160,10 +240,26 @@ this can take quite a while for the first load. The time to interact is the term
 page loads to when the interactions will work. When you move from SPA to SSR, you trade
 these awkward states in SPA where the UI is incorrect and changing a whole bunch, loading spinners and all that. You're swapping that for a longer window for the first load but a significantly better experience of the page loading
 with the correct information.
-&nbsp;  
+&nbsp;
+\
 \
 \
 &nbsp;
+
+# Section 6: Future Trends in Rendering Paradigms
+
+&nbsp;
+\
+&nbsp;
+
+- Performance Optimization: Server-Side Rendering as the Next Big Thing React
+- Server Components: Shaping the Future of Rendering Logic
+
+&nbsp;
+\
+\
+&nbsp;
+
 This is a bird's view of the whole rendering paradigm as I see it.
 Currently, server-side rendering makes much sense for performance optimization, and
 frameworks like Next.js make it easier to adopt and use. All the trends show this will be the next big thing, especially with new React server components.
