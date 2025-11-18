@@ -13,10 +13,9 @@
     h3 {
       @apply text-lg;
     }
-    ul {
-      @apply list-disc;
+    /* Only apply list styles to content areas, not navigation */
+    article ul,
+    .prose ul {
+      @apply list-disc ml-11;
     }
-    ul {
-        @apply ml-11;
-      }
   }
