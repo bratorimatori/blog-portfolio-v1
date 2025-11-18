@@ -1,32 +1,45 @@
 import GradientBox from '@/components/GradientBox';
 import { Field, Form, Formik } from 'formik';
 import Link from 'next/link';
+import { useState } from 'react';
 
 interface FormValues {
   name: string;
-  email: string;
   message: string;
 }
 
 export default function Contact() {
-  const handleSubmit = async (value: FormValues) => {
-    const res = await fetch('/api/sendgrid', {
-      body: JSON.stringify({
-        email: value.email,
-        fullname: value.name,
-        subject: 'subject',
-        message: value.message,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    });
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
-    const { error } = await res.json();
-    if (error) {
-      console.log(error);
-      return;
+  const handleSubmit = async (value: FormValues) => {
+    try {
+      setSubmitStatus('idle');
+      setErrorMessage('');
+
+      const res = await fetch('/api/contact', {
+        body: JSON.stringify({
+          fullname: value.name,
+          subject: 'Contact Form Submission',
+          message: value.message,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      setSubmitStatus('success');
+    } catch (error: any) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus('error');
+      setErrorMessage(error.message || 'Something went wrong. Please try again.');
     }
   };
 
@@ -48,39 +61,48 @@ export default function Contact() {
       <Formik<FormValues>
         initialValues={{
           name: '',
-          email: '',
           message: '',
         }}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
+          await handleSubmit(values);
+          if (submitStatus === 'success') {
+            actions.resetForm();
+          }
           actions.setSubmitting(false);
-          handleSubmit(values);
         }}
       >
-        {() => (
+        {({ isSubmitting }) => (
           <Form className='container flex flex-col items-start justify-start mx-auto w-2/3 ml-0 mt-10'>
+            {submitStatus === 'success' && (
+              <div className='w-full mb-4 p-4 bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-600 text-green-700 dark:text-green-200 rounded-md'>
+                Message sent successfully! I&apos;ll get back to you soon.
+              </div>
+            )}
+            {submitStatus === 'error' && (
+              <div className='w-full mb-4 p-4 bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-200 rounded-md'>
+                {errorMessage}
+              </div>
+            )}
             <Field
               className='border-solid border pr-3 pl-3 pt-2 pb-2 w-full mb-4 rounded-md focus:outline-none focus-visible:ring'
               name='name'
               type='text'
               placeholder='Name'
-            />
-            <Field
-              className='border-solid border pr-3 pl-3 pt-2 pb-2 w-full mb-4 rounded-md focus:outline-none focus-visible:ring'
-              name='email'
-              type='email'
-              placeholder='Email'
+              required
             />
             <Field
               className='border-solid border pr-3 pl-3 pt-2 pb-2 w-full mb-4 rounded-md h-44 focus:outline-none focus-visible:ring'
               name='message'
               component='textarea'
               placeholder='Message'
+              required
             />
             <button
-              className='text-gray-500 dark:text-gray-300 text-sm leading-4 border-solid border rounded-md bg-gray-100 border-gray-800 hover:border-gray-300 pr-3 pl-3 pt-2 pb-2 dark:bg-button-background dark:border-gray-800 dark:hover:border-gray-400'
+              className='text-gray-500 dark:text-gray-300 text-sm leading-4 border-solid border rounded-md bg-gray-100 border-gray-800 hover:border-gray-300 pr-3 pl-3 pt-2 pb-2 dark:bg-button-background dark:border-gray-800 dark:hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed'
               type='submit'
+              disabled={isSubmitting}
             >
-              Send Message
+              {isSubmitting ? 'Sending...' : 'Send Message'}
             </button>
           </Form>
         )}
