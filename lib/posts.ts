@@ -1,78 +1,102 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import matter from 'gray-matter';
 
-const postsDirectory = path.join(process.cwd(), 'posts');
+const POSTS_DIR = path.join(process.cwd(), 'posts');
+const POST_EXTENSIONS = ['.md', '.mdx'];
+const WORDS_PER_MINUTE = 200;
 
-export interface Post {
-  id: string;
-  date: string;
-  title: string;
-  content: string;
-  desc: string;
+export type Post = {
   slug: string;
-  coverImage: string;
+  title: string;
+  description: string;
+  /** ISO date from frontmatter, used for sorting. */
+  date: string;
+  /** "Jul 01, 2023", the form that actually gets rendered. */
+  dateFormatted: string;
+  year: string;
   author: string;
+  coverImage?: string;
+  content: string;
+  readingTime: number;
+};
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: '2-digit',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+function formatDate(iso: string): string {
+  const parsed = new Date(iso);
+  return Number.isNaN(parsed.getTime()) ? iso : dateFormatter.format(parsed);
 }
 
-export function getSortedPostsData(): Post[] {
-  const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames.map((fileName) => {
-    const id = fileName.replace(/\.md$/, '');
-
-    const fullPath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-    const matterResult = matter(fileContents);
-    const date = matterResult.data['date'];
-    const title = matterResult.data['title'];
-    const desc = matterResult.data['desc'];
-    const slug = matterResult.data['slug'];
-    const coverImage = matterResult.data['coverImage'];
-    const author = matterResult.data['author'];
-    const content = matterResult.content;
-
-    return {
-      id,
-      date,
-      title,
-      content,
-      desc,
-      slug,
-      coverImage,
-      author,
-    };
-  });
-  return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
+function estimateReadingTime(content: string): number {
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
 
-export function getAllPostIds() {
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames.map((fileName) => {
-    return {
-      params: {
-        id: fileName.replace(/\.md$/, ''),
-      },
-    };
-  });
+function postFileNames(): string[] {
+  if (!fs.existsSync(POSTS_DIR)) return [];
+  return fs
+    .readdirSync(POSTS_DIR)
+    .filter((name) => POST_EXTENSIONS.includes(path.extname(name)));
 }
 
-export function getPostData(id: string) {
-  const fullPath = path.join(postsDirectory, `${id}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
+function readPost(fileName: string): Post {
+  const raw = fs.readFileSync(path.join(POSTS_DIR, fileName), 'utf8');
+  const { data, content } = matter(raw);
 
-  // Use gray-matter to parse the post metadata section
-  const matterResult = matter(fileContents);
+  // Frontmatter `slug` wins so URLs stay stable if a file is renamed;
+  // otherwise fall back to the filename minus its extension.
+  const slug =
+    typeof data['slug'] === 'string' && data['slug']
+      ? data['slug']
+      : fileName.replace(/\.mdx?$/, '');
 
-  // Combine the data with the id
+  const date = typeof data['date'] === 'string' ? data['date'] : '';
+
   return {
-    id,
-    ...matterResult.data,
+    slug,
+    title: typeof data['title'] === 'string' ? data['title'] : slug,
+    description: typeof data['desc'] === 'string' ? data['desc'] : '',
+    date,
+    dateFormatted: formatDate(date),
+    year: date.slice(0, 4) || 'Undated',
+    author: typeof data['author'] === 'string' ? data['author'] : 'Bojan Tomic',
+    coverImage:
+      typeof data['coverImage'] === 'string' ? data['coverImage'] : undefined,
+    content,
+    readingTime: estimateReadingTime(content),
   };
+}
+
+/** All posts, newest first. */
+export function getAllPosts(): Post[] {
+  return postFileNames()
+    .map(readPost)
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+export function getPostBySlug(slug: string): Post | null {
+  return getAllPosts().find((post) => post.slug === slug) ?? null;
+}
+
+export type PostsByYear = { year: string; posts: Post[] }[];
+
+/** Posts grouped under year headings, newest year first. */
+export function getPostsByYear(): PostsByYear {
+  const groups = new Map<string, Post[]>();
+
+  for (const post of getAllPosts()) {
+    const existing = groups.get(post.year);
+    if (existing) existing.push(post);
+    else groups.set(post.year, [post]);
+  }
+
+  return [...groups.entries()]
+    .map(([year, posts]) => ({ year, posts }))
+    .sort((a, b) => b.year.localeCompare(a.year));
 }

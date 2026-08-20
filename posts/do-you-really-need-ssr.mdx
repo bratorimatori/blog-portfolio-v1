@@ -1,6 +1,6 @@
 ---
 title: 'Do you REALLY need SSR?'
-desc: 'Do you REALLY need SSR?'
+desc: 'Client rendering, server rendering, and hydration: what each one actually costs, and how to tell which your app needs.'
 slug: 'do-you-really-need-ssr'
 coverImage: '/cover/cover.jpg'
 author: 'Bojan Tomic'
@@ -9,15 +9,9 @@ date: '2023-07-01'
 
 # Section 1: Evolution of Rendering Logic
 
-&nbsp;
-\
-&nbsp;
-
 - Introduction to React: Transforming HTML Rendering
 - Client-Side Rendering Magic: The Impact of React's JavaScript Bundle
 
-\
-\
 You might have heard about React. It's been the easiest way to render HTML on user devices.
 However, that last bit is vital. It renders on your user's devices. Reacts most significant Revolution was sending a giant JavaScript bundle to your user's device that could render the HTML
 that the page starts with and update it as things change. It was genuinely magical writing your render logic once and having it be the logic for your template
@@ -31,22 +25,12 @@ But what happens when they make a new post? Before Frameworks like React and bef
 a POST or any further request you did on the web would fire a full web request and refresh the entire page
 generating entirely new HTML or getting a new static HTML page. React made it easier to do all that on the client and send JSON blobs back.
 And then suddenly, we didn't have to fetch new HTML every time something changed.
-&nbsp;  
-\
-\
-&nbsp;
 
 # Section 2: Declarative vs. Imperative Syntax
-
-&nbsp;
-\
-&nbsp;
 
 - React's Declarative Approach: Describing vs. Instructing Rendering
 - Pre-React Era: Templating Languages and Imperative Syntax Challenges
 
-\
-\
 This came with the cost. The first big one is the client-side performance hit because the server is not rendering HTML the user's device is.
 Now the user's device is responsible for a lot more work.
 On top of that, things like HTML metadata and tags and all the fancy things you expect robots to crawl and get when you index on Google or you post on social media
@@ -56,17 +40,9 @@ to render this on your user's device. It is no coincidence that GraphQL came so 
 needed to be much more strict about what data they exposed and how the client consumes it so you can build things using this model.
 React, and GraphQL allowed us to do crazy things on user's devices that we've never done before, but now you need a user to have a powerful device
 and you need to send requests back and forth a whole bunch of times to get something on their devices.
-&nbsp;  
-\
-\
-&nbsp;
 
-# ![multy-page-application](/images/multy-page-app.png)
+![multy-page-application](/images/multy-page-app.png)
 
-&nbsp;  
-\
-\
-&nbsp;
 In the old model, the way things worked in the original Multy-Page Application is that your device would request the server for **example.com**.
 The server does whatever it has to do to generate HTML. The HTML file is then sent to the user, which has all the content on it.
 If the file is a static file, then the server has it and can skip the generation, and when you say get **example.com** it just hands you the static HTML file.
@@ -75,31 +51,13 @@ anything to change about the HTML. In that case, you need to do that on the serv
 change. If you want your HTML to change, you need something like JavaScript to update the HTML. We have two options either we have an HTML with nothing in it, and then
 the JavaScript does everything on the user's device, or we generate the HTML entirely on the server, and then the client updates it from there, so I've shown you the latter
 the original.
-&nbsp;  
-\
-\
-&nbsp;
 
-# ![multy-page-application](/images/single-page-model.png)
-
-&nbsp;  
-\
-\
-&nbsp;
+![multy-page-application](/images/single-page-model.png)
 
 # Section 3: Enhancing User Experience
 
-&nbsp;
-\
-&nbsp;
-
 - Dynamic Content Rendering: The Twitter Homepage Example
 - Pre-React Web Requests: Full Page Refresh vs. Client-Side Updates
-
-&nbsp;
-\
-\
-&nbsp;
 
 The Single Page Application model. What happens first, you request the website, and you'll almost immediately get it back. You might even be hitting the cache, so you have it
 instantaneously. So you get **example.com/index.html**. However, this HTML has almost nothing in it.
@@ -111,8 +69,6 @@ This now goes from CDN back to the user's device. You currently have this JavaSc
 Since now, we have the HTML and the JavaScript file but no actual data.
 How do we get the additional data? Well, you get that data by contacting an API. You now have a separate server that hosts the API you're
 hitting with the request for actual data you need to render the page.
-\
-\
 This is like when we should show your feed on Twitter or the current home page on Twitch. Actual data, a bunch of JSON blobs. Your
 API does whatever it needs to fetch the data. It goes to the database, calls services, caches whatever, and then it sends back, after all that, a bunch of JSON data
 or whatever else, and now the client can finally show you something. The vital thing to know is until this point, you see nothing. These things must happen
@@ -123,41 +79,20 @@ first, we have to send the blank HTML, then we have to get the JavaScript bundle
 After we fetched additional API data, only then do we have an actual page, and the client has to make three separate requests for this to happen.
 The first request is for the HTML, the second one is for JavaScript, and the third and onward requests are for the actual data that you need to
 render the page so the client can do that rendering.
-\
-\
 This can get even scarier if we need to make more than one API request. If I request something, I render a component, and then that component needs to request more
 things. It can become like several back-and-forths before we have the correct page. We've all seen this whenever we go to a web page, and then a bunch of random scaffolding and skeletons load, and there are loading Spinners everywhere. Those loading Spinners keep ticking out, and sometimes, like, one will disappear, and two more will appear underneath, and it keeps going until the whole UI renders. That's because we are doing all of this
 work on the client and generating each of those parts. Every component can be its own contained set of these calls, and that's terrifying.
 If we go back to MPA, what we had before SPA took over is this blank window where all that happened was the browser loading and then the page loading and getting the correct page. There's
 no state in between and no control over what the loading state looks like because the browser loads, and the static HTML page gets delivered. You just get the page with the correct info on it.
 
-&nbsp;  
-\
-\
-&nbsp;
-
-# ![multy-page-application](/images/server-side-rendering.png)
-
-&nbsp;  
-\
-\
-&nbsp;
+![multy-page-application](/images/server-side-rendering.png)
 
 # Section 4: Introduction to Server-Side Rendering (SSR)
-
-&nbsp;
-\
-&nbsp;
 
 - SSR Concept: Bridging the Gap Between MPA and SPA Benefits of SSR:
 - Writing React Code Once for Both Server and Client Immediate Return Options: SSG
 - ISR in Next.js Full SSR Process: Browser Load, Server Rendering, JavaScript
   Fetching
-
-&nbsp;
-\
-\
-&nbsp;
 
 What is SSR? In a traditional sense, MPA is server-side rendered. The server
 is rendering the page, but it's generating HTML and has no idea what happens after
@@ -176,10 +111,6 @@ do a couple of different things. You can have a cached static page that you retu
 immediately, so one option is immediate return SSG Static Site Generation so the
 HTML file already made and build. Another excellent option specific to Next.js is
 ISR Immediately Return Chache page if the cache page is still valid.
-&nbsp;
-\
-\
-&nbsp;
 ISR is a fantastic concept where you could have a thing that was generated rather than a thing
 existing forever, and now it's out of date. You can manually revalidate it when changes
 happen, so rather than regenerating your whole site when you push or having to tell
@@ -207,24 +138,10 @@ it's coming from the CDN. Then it will parse the JavaScript. The page is loaded,
 but the interactions need to be because, without JavaScript, the buttons won't work,
 form submissions won't work all of the things we do in our JavaScript won't work.
 
-&nbsp;
-\
-\
-&nbsp;
-
 # Section 5: Hydration and Time to Interact
-
-&nbsp;
-\
-&nbsp;
 
 - Hydration Concept: JavaScript Taking Over After HTML Rendering Time
 - Interact: Balancing First Load Delays with Improved Interactivity
-
-&nbsp;
-\
-\
-&nbsp;
 
 We now need to hydrate the page.
 Hydration is a concept of JavaScript libraries that read the HTML and take over from there because
@@ -240,25 +157,11 @@ this can take quite a while for the first load. The time to interact is the term
 page loads to when the interactions will work. When you move from SPA to SSR, you trade
 these awkward states in SPA where the UI is incorrect and changing a whole bunch, loading spinners and all that. You're swapping that for a longer window for the first load but a significantly better experience of the page loading
 with the correct information.
-&nbsp;
-\
-\
-\
-&nbsp;
 
 # Section 6: Future Trends in Rendering Paradigms
 
-&nbsp;
-\
-&nbsp;
-
 - Performance Optimization: Server-Side Rendering as the Next Big Thing React
 - Server Components: Shaping the Future of Rendering Logic
-
-&nbsp;
-\
-\
-&nbsp;
 
 This is a bird's view of the whole rendering paradigm as I see it.
 Currently, server-side rendering makes much sense for performance optimization, and
