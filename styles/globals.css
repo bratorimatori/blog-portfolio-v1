@@ -1,21 +1,256 @@
+@import './tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.google.com/share?selection.family=Inter:wght@300");
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
 
 @layer base {
-    h1 {
-      @apply text-2xl;
-    }
-    h2 {
-      @apply text-xl;
-    }
-    h3 {
-      @apply text-lg;
-    }
-    /* Only apply list styles to content areas, not navigation */
-    article ul,
-    .prose ul {
-      @apply list-disc ml-11;
+  html {
+    /* --font-sans / --font-serif / --font-mono are injected by next/font in
+       app/layout.tsx. The serif theme just repoints the sans slot, so every
+       component that asks for "the body font" follows along. */
+    --font-body: var(--font-sans);
+  }
+
+  html.theme-serif {
+    --font-body: var(--font-serif);
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings carry no intrinsic weight or size. Every one is styled at the
+     call site. Keeps the reference's flat, quiet hierarchy from creeping back
+     toward browser defaults. */
+  h1, h2, h3, h4, h5, h6, p, blockquote, figure {
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+  }
+
+  strong { font-weight: 700; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; height: auto; }
+
+  ::selection {
+    background: var(--color-accent-wash);
+    color: var(--color-accent-hover);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-s);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Layout grid
+
+   A single named-column grid. Children opt into `narrow` (the 40rem reading
+   column), `wide` (60rem, for figures and cards), or `full` (edge to edge)
+   instead of nesting containers.
+   --------------------------------------------------------------------------- */
+
+@layer components {
+  .layout-grid {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(1rem, 1fr)
+      [wide-start] minmax(0, calc((var(--grid-wide) - var(--grid-narrow)) / 2))
+      [narrow-start] var(--grid-narrow) [narrow-end]
+      minmax(0, calc((var(--grid-wide) - var(--grid-narrow)) / 2)) [wide-end]
+      minmax(1rem, 1fr) [full-end];
+    gap: 0 1rem;
+  }
+
+  @media (max-width: 800px) {
+    .layout-grid {
+      gap: 0;
+      grid-template-columns:
+        [full-start] 1rem
+        [wide-start narrow-start] minmax(1rem, 1fr) [narrow-end wide-end]
+        1rem [full-end];
     }
   }
+
+  .col-narrow { grid-column: narrow; }
+  .col-wide   { grid-column: wide; }
+  .col-full   { grid-column: full; }
+
+  /* -- flow spacing -------------------------------------------------------
+     Opt-in owl selector. The reference applies this globally via `body *+*`;
+     scoping it to `.flow` keeps it from fighting Tailwind's flex/grid gaps.  */
+
+  .flow > * + * { margin-top: var(--flow-space, var(--space-s)); }
+  .flow-loose   { --flow-space: var(--space-m); }
+  .flow-compact { --flow-space: var(--space-xs); }
+  .flow-tight   { --flow-space: 0.25rem; }
+}
+
+/* ---------------------------------------------------------------------------
+   Prose: post bodies rendered from markdown
+   --------------------------------------------------------------------------- */
+
+@layer components {
+  .prose-post {
+    color: var(--color-text-primary);
+    line-height: var(--leading-normal);
+  }
+
+  .prose-post > * + * { margin-top: var(--space-s); }
+
+  .prose-post h2,
+  .prose-post h3,
+  .prose-post h4 {
+    color: var(--color-heading);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: var(--leading-tight);
+    margin-top: var(--space-m);
+  }
+
+  .prose-post h2 { font-size: var(--text-l); }
+  .prose-post h3 { font-size: var(--text-m); }
+  .prose-post h4 { font-size: var(--text-m); color: var(--color-text-secondary); }
+
+  .prose-post a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+    transition: color 0.2s ease-out;
+  }
+  .prose-post a:hover {
+    color: var(--color-accent-hover);
+    transition-duration: 25ms;
+  }
+
+  .prose-post ul,
+  .prose-post ol {
+    padding-left: 1.25em;
+  }
+  .prose-post ul { list-style: disc; }
+  .prose-post ol { list-style: decimal; }
+  .prose-post li + li { margin-top: var(--space-xs); }
+  .prose-post li::marker { color: var(--color-text-tertiary); }
+
+  .prose-post blockquote {
+    border-left: 2px solid var(--color-border-strong);
+    padding-left: var(--space-s);
+    color: var(--color-text-secondary);
+  }
+
+  .prose-post code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-s);
+    padding: 0.1em 0.35em;
+  }
+
+  .prose-post pre {
+    font-family: var(--font-mono);
+    font-size: var(--text-s);
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-m);
+    padding: var(--space-s);
+    overflow-x: auto;
+    line-height: var(--leading-normal);
+  }
+  .prose-post pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  .prose-post hr {
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    margin: var(--space-m) 0;
+  }
+
+  .prose-post img {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-m);
+    margin: var(--space-m) 0;
+  }
+
+  .prose-post figure { margin: var(--space-m) 0; }
+  .prose-post figcaption {
+    color: var(--color-text-secondary);
+    font-size: var(--text-s);
+    margin-top: var(--space-xs);
+  }
+
+  .prose-post table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-s);
+  }
+  .prose-post th,
+  .prose-post td {
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-xs) var(--space-s) var(--space-xs) 0;
+    text-align: left;
+  }
+  .prose-post th { color: var(--color-heading); font-weight: 500; }
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities
+   --------------------------------------------------------------------------- */
+
+@layer utilities {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Toggle icons
+
+   Both icon states are always in the DOM; CSS on <html> picks the visible one.
+   `visibility` rather than `display` so the SVG box never resizes.
+   --------------------------------------------------------------------------- */
+
+html .icon-light  { visibility: visible; }
+html .icon-dark   { visibility: hidden; }
+html.dark .icon-light { visibility: hidden; }
+html.dark .icon-dark  { visibility: visible; }
+
+html .icon-sans  { visibility: visible; }
+html .icon-serif { visibility: hidden; }
+html.theme-serif .icon-sans  { visibility: hidden; }
+html.theme-serif .icon-serif { visibility: visible; }

@@ -38,3 +38,7 @@ next-env.d.ts
 
 # claude code
 .claude
+
+# LinkedIn/profile exports kept locally for reference; not for the repo
+/Profile.pdf
+/profile-tmp.pdf

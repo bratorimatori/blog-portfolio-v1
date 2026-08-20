@@ -1,0 +1,122 @@
+/* ---------------------------------------------------------------------------
+   Design tokens
+
+   Layer 1: raw scales (--c-gray-*, --c-blue-*). Components never touch these.
+   Layer 2: semantic aliases (--color-*). This is the whole component API, and
+             it is the only layer `.dark` remaps, so a theme swap is one block
+             and no component needs a `dark:` variant.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --c-white: #ffffff;
+  --c-black: #000000;
+
+  --c-gray-0: #ffffff;
+  --c-gray-25: #f8f8fa;
+  --c-gray-50: #ededed;
+  --c-gray-100: #dbdde5;
+  --c-gray-150: #c9cfd8;
+  --c-gray-200: #b8c0cb;
+  --c-gray-300: #9ca6ae;
+  --c-gray-400: #868e92;
+  --c-gray-500: #72777a;
+  --c-gray-600: #5f6264;
+  --c-gray-700: #4c4f50;
+  --c-gray-800: #393b3d;
+  --c-gray-900: #242627;
+  --c-gray-1000: #000000;
+
+  --c-blue-25: #f4f6fd;
+  --c-blue-50: #eaedfc;
+  --c-blue-100: #d6dcfb;
+  --c-blue-150: #c4ccfa;
+  --c-blue-200: #b3bcfb;
+  --c-blue-300: #939dfc;
+  --c-blue-400: #7580fe;
+  --c-blue-500: #5763ff;
+  --c-blue-600: #3445fd;
+  --c-blue-700: #122be8;
+  --c-blue-800: #1522ae;
+  --c-blue-900: #101771;
+
+  /* -- semantic ------------------------------------------------------------ */
+  --color-bg: var(--c-gray-0);
+  --color-bg-subtle: var(--c-gray-25);
+  --color-text-primary: var(--c-gray-800);
+  --color-text-secondary: var(--c-gray-500);
+  --color-text-tertiary: var(--c-gray-400);
+  --color-heading: var(--c-gray-900);
+  --color-border: var(--c-gray-50);
+  --color-border-strong: var(--c-gray-100);
+  --color-accent: var(--c-blue-500);
+  --color-accent-hover: var(--c-blue-600);
+  --color-accent-active: var(--c-blue-700);
+  --color-accent-muted: var(--c-blue-400);
+  --color-accent-wash: var(--c-blue-50);
+  --color-accent-wash-subtle: var(--c-blue-25);
+  --color-on-accent: var(--c-white);
+}
+
+.dark {
+  --c-gray-0: #1a1921;
+  --c-gray-25: #20202a;
+  --c-gray-50: #25262e;
+  --c-gray-100: #2f3237;
+  --c-gray-150: #393c40;
+  --c-gray-200: #434649;
+  --c-gray-300: #56595c;
+  --c-gray-400: #696d6f;
+  --c-gray-500: #7e8285;
+  --c-gray-600: #959a9c;
+  --c-gray-700: #aeb3b6;
+  --c-gray-800: #cbd0d2;
+  --c-gray-900: #edeff0;
+  --c-gray-1000: #ffffff;
+
+  --c-blue-25: #1c212a;
+  --c-blue-50: #202734;
+  --c-blue-100: #25324a;
+  --c-blue-150: #293b60;
+  --c-blue-200: #2a4478;
+  --c-blue-300: #2555aa;
+  --c-blue-400: #1566e0;
+  --c-blue-500: #3b7bff;
+  --c-blue-600: #7394fc;
+  --c-blue-700: #9faff6;
+  --c-blue-800: #c6cef2;
+  --c-blue-900: #edeef7;
+
+  /* Secondary text lifts one step in dark so it stays legible on #1a1921. */
+  --color-text-secondary: var(--c-gray-600);
+}
+
+/* ---------------------------------------------------------------------------
+   Layout, spacing, type scale
+   --------------------------------------------------------------------------- */
+
+:root {
+  --grid-narrow: 40rem; /* the reading column */
+  --grid-wide: 60rem;   /* figures and project cards bleed out to this */
+
+  --space-xs: 0.5rem;
+  --space-s: 1rem;
+  --space-m: 2.25rem;
+  --space-l: 5rem;
+  --space-xl: 8rem;
+
+  --radius-s: 0.25rem;
+  --radius-m: 0.5rem;
+  --radius-l: 1rem;
+
+  /* Fluid type: everything scales with the viewport, no breakpoints needed. */
+  --text-base: clamp(17px, 2vw, 19px);
+  --text-xs: clamp(0.7rem, 2vw, 0.8rem);
+  --text-s: clamp(0.85rem, 2vw, 0.9rem);
+  --text-m: 1em;
+  --text-l: clamp(1.2rem, 2vw, 1.4rem);
+  --text-xl: clamp(1.4rem, 3vw, 1.7rem);
+  --text-xxl: clamp(1.6rem, 4vw, 2rem);
+
+  --leading-tight: clamp(1.2em, calc(26px - 1vw), 1.3em);
+  --leading-normal: clamp(1.4em, calc(28px - 1vw), 1.5em);
+}
